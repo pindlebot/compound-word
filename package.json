@@ -1,0 +1,14 @@
+{
+  "name": "compound-word",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^23.4.0",
+    "fs-extra": "^6.0.1"
+  },
+  "dependencies": {}
+}
