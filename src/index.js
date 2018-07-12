@@ -10,7 +10,7 @@ const findWord = maybeWord => dictionary.find(([word, score]) => word === maybeW
 const hasUppercase = chars =>
   chars.slice(1, chars.length).some(isUppercase)
 
-const splitSimple = (chars) => {
+const simpleSplit = (chars) => {
   let str = ''
   let out = []
   let index = 0
@@ -51,7 +51,7 @@ const calculateScore = (modifier, head) => {
   return value
 }
 
-const splitAmbiguous = chars => {
+const difficultSplit = (chars, { bias }) => {
   let str = ''
   let out = []
   let index = 0
@@ -72,7 +72,7 @@ const splitAmbiguous = chars => {
       let head = chars.slice(str.length, chars.length).join('')
       let score = calculateScore(str, head)
       if (score > 0) {
-        score = score - Math.abs(str.length - head.length)
+        score = bias(str, head, score)
         options.push({ parts: [str, head], score })
       }
     }
@@ -82,20 +82,21 @@ const splitAmbiguous = chars => {
   return options[0] || []
 }
 
-const splitCompound = string => {
+function bias (left, right, score) {
+  return score - Math.abs(left.length - right.length)
+}
+
+function parse (string, options = {}) {
+  options.bias = options.bias || bias
   let chars = stripTld(string).split('')
   let hasUppercase = chars.slice(1, chars.length).some(isUppercase)
 
   let result = chars.every(isUppercase)
     ? []
     : hasUppercase
-      ? splitSimple(chars)
-      : splitAmbiguous(chars)
-  return { string, result }
+      ? simpleSplit(chars)
+      : difficultSplit(chars, options)
+    
+  return result
 }
-
-function parse (strings) {
-  return strings.map(splitCompound)
-}
-
 module.exports = parse

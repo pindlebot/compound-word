@@ -25,21 +25,21 @@ const input = {
   'backbone': ['back', 'bone']
 }
 
-let output = parse(Object.keys(input))
+// let output = parse(Object.keys(input))
 
-output.forEach(({ result, string }) => {
+// output.forEach(({ result, string }) => {
   // it(`${string}`, () => {
   //  expect(result).toMatchObject(input[string])
   // })
-})
+// })
 
-const compounds = require('./compounds.json')
+const compounds = require('./compounds.json').slice(0, 10)
 
 compounds.forEach(entry => {
   let { firstWord, secondWord, compoundWord } = entry
 
   it(compoundWord, () => {
     let arr = [firstWord, secondWord]
-    expect(parse([compoundWord])[0].result).toMatchObject(arr)
+    expect(parse(compoundWord)).toMatchObject(arr)
   })
 })
